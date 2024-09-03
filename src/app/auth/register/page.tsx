@@ -1,14 +1,16 @@
-import { Center, Title } from '@mantine/core';
+import { Center } from '@mantine/core';
+import { Register as Page } from '@pages/auth';
+import { auth } from '@lib/auth';
 
 export const metadata = {
     title: 'Register'
 }
 
-const Register = () => {
+const Register = async () => {
 
     return (
-        <Center h='100vh'>
-            <Title order={ 1 }>Register</Title>
+        <Center mih='100vh' p='md'>
+            <Page />
         </Center>
     )
 }
