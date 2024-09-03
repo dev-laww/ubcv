@@ -51,6 +51,12 @@
       ],
       "@lib": [
         "src/lib"
+      ],
+      "@actions/*": [
+        "src/actions/*"
+      ],
+      "@actions": [
+        "src/actions"
       ]
     }
   },
