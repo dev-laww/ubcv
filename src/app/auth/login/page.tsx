@@ -1,14 +1,14 @@
-import { Center, Title } from '@mantine/core';
+import { Center } from '@mantine/core';
+import { Login as Page } from '@pages/auth'
 
 export const metadata = {
     title: 'Register'
 }
 
 const Login = () => {
-
     return (
-        <Center h='100vh'>
-            <Title order={ 1 }>Login</Title>
+        <Center h='100vh' p='md'>
+            <Page />
         </Center>
     )
 }
