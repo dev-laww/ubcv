@@ -71,7 +71,8 @@ const Register = ({ session }: RegisterProps) => {
             autoClose: 2000,
             loading: false
         })
-        router.push('/auth/login')
+
+        session ? router.push('/') : router.push('/auth/login')
     };
 
     return (

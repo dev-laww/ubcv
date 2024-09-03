@@ -2,6 +2,8 @@ import { Divider, Group, Paper, Text } from '@mantine/core';
 import { Google } from '@components/common/buttons';
 import { Register as Form } from '@components/forms';
 import { auth, signIn } from '@lib/auth';
+import { prisma } from '@lib/prisma';
+import { redirect } from 'next/navigation';
 
 const Register = async () => {
     const action = async () => {
@@ -10,6 +12,14 @@ const Register = async () => {
         await signIn('google');
     }
     const session = await auth()
+
+    const user = await prisma.user.findFirst({
+        where: { email: session?.user?.email }
+    })
+
+    if (user?.password)
+        redirect('/')
+
 
     return (
         <Paper radius='md' p='xl' withBorder miw={ { base: '100%', sm: 600 } }>
