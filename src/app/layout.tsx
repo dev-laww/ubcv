@@ -4,7 +4,10 @@ import { ColorSchemeScript } from '@mantine/core';
 import { Providers } from '@components/common';
 
 export const metadata = {
-    title: 'UBCV'
+    title: {
+        default: 'UBCV',
+        template: '%s | UBCV'
+    }
 };
 
 const RootLayout = ({ children }: Readonly<React.PropsWithChildren>) => {

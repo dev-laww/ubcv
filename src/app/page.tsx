@@ -1,10 +1,14 @@
-import { Box } from '@mantine/core';
-import React from 'react';
+import { Center, Title } from '@mantine/core';
 
-export default function HomePage() {
+
+const Home = () => {
+
     return (
-        <Box h='100vh'>
-            Home
-        </Box>
+        <Center h='100vh'>
+            <Title order={ 1 }>Home</Title>
+        </Center>
     )
 }
+
+
+export default Home
