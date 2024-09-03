@@ -1,12 +1,4 @@
-import {
-    Box,
-    Center,
-    Group,
-    PasswordInput as Input,
-    PasswordInputProps,
-    Progress,
-    Text
-} from '@mantine/core';
+import { Box, Center, Group, PasswordInput as Input, PasswordInputProps, Progress, Text } from '@mantine/core';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import { getStrength, requirements } from '@utils/password';
 
@@ -45,7 +37,7 @@ export const PasswordStrength = (props: PasswordInputProps) => {
             />
         ));
 
-    const { placeholder, label, onChange, ...rest } = props;
+    const { placeholder, name, label, onChange, withAsterisk, error, ...rest } = props;
 
     return (
         <Box { ...rest }>
@@ -53,6 +45,9 @@ export const PasswordStrength = (props: PasswordInputProps) => {
                 label={ label }
                 placeholder={ placeholder }
                 onChange={ onChange }
+                withAsterisk={ withAsterisk }
+                name={ name }
+                error={ error }
             />
 
             <Group gap={ 5 } grow mt='xs' mb='md'>
