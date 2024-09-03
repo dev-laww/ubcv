@@ -1,6 +1,6 @@
 import Credentials, { CredentialsConfig } from 'next-auth/providers/credentials';
 import { prisma } from '@lib/prisma';
-import { compare } from '@utils/hashing';
+import { compare } from '@utils/password';
 
 const options: Partial<CredentialsConfig> = {
     credentials: {
