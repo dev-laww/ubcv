@@ -12,8 +12,8 @@ export const authOptions: NextAuthConfig = {
     adapter: PrismaAdapter(prisma),
     session: { strategy: 'jwt' },
     pages: {
-        error: '/auth/error',
-        newUser: '/auth/new-user'
+        newUser: '/auth/register',
+        signIn: '/auth/login'
     },
     callbacks: {
         jwt: async ({
