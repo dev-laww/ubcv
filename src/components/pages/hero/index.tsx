@@ -19,10 +19,12 @@ const Hero: React.FC = () => {
                         <Box>
                             <Title className={ classes.title }>E-UBCV</Title>
                             <Text className={ classes.description } size='xl' mt='xl'>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-                                molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
-                                numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
-                                optio, eaque rerum! Provident similique accusantium nemo autem.
+
+                                Introducing the next-generation AI chatbot for the University of Batangas, designed to
+                                embody and promote the institution&lsquo;s core values. This intelligent assistant not only
+                                answers questions but also engages students and faculty in meaningful conversations,
+                                fostering a deeper connection to UB&lsquo;s principles of integrity, excellence, and social
+                                responsibility
                             </Text>
 
 
