@@ -1,6 +1,7 @@
-import { Center } from '@mantine/core';
+import { Center, Overlay } from '@mantine/core';
 import { Register as Page } from '@pages/auth';
 import { auth } from '@lib/auth';
+import { VideoBackground } from '@components/common';
 
 export const metadata = {
     title: 'Register'
@@ -9,9 +10,12 @@ export const metadata = {
 const Register = async () => {
 
     return (
-        <Center mih='100vh' p='md'>
-            <Page />
-        </Center>
+        <VideoBackground src='/background.mp4' autoPlay loop muted>
+            <Overlay zIndex={ -1 } blur={ 10 } />
+            <Center h='100vh' p='md'>
+                <Page />
+            </Center>
+        </VideoBackground>
     )
 }
 
