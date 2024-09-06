@@ -34,6 +34,9 @@
       "@pages/*": [
         "src/components/pages/*"
       ],
+      "@pages": [
+        "src/components/pages"
+      ],
       "@hooks/*": [
         "src/hooks/*"
       ],
