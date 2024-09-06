@@ -14,11 +14,11 @@ const { auth } = NextAuth({
 export const middleware = async (req: NextRequest) => {
     const { pathname } = req.nextUrl;
 
-    // if (pathname === '/') return NextResponse.next();
+    if (pathname === '/') return NextResponse.next();
 
     const session = await auth()
 
-    // if (!session) return NextResponse.redirect(new URL('/auth/login', req.nextUrl));
+    if (!session) return NextResponse.redirect(new URL('/auth/login', req.nextUrl));
     //
     // if (pathname.includes('/admin')) {
     //     if (session.user.role === 'admin') {

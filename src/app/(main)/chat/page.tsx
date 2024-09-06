@@ -11,3 +11,5 @@ const Chat = () => {
         </Center>
     )
 }
+
+export default Chat;
