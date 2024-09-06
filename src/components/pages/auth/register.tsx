@@ -18,7 +18,7 @@ const Register = async () => {
     })
 
     if (user?.password)
-        redirect('/')
+        redirect('/chat')
 
 
     return (

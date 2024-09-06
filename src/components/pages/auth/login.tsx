@@ -7,7 +7,7 @@ const Login = () => {
     const action = async () => {
         'use server'
 
-        await signIn('google', { redirectTo: '/' });
+        await signIn('google', { redirectTo: '/chat' });
     }
 
     return (
