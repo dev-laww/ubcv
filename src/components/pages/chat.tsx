@@ -26,8 +26,6 @@ const Chat = () => {
                     viewportRef={ viewport }
                     scrollbarSize={ 3 }
                     offsetScrollbars
-                    id='scroll'
-                    onScroll={ event => console.log('scrolling', event) }
                 >
                     <Container size='sm' py='lg' ref={ ref }>
                         {/*    content here   */ }
