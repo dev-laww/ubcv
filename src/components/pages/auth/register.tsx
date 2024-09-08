@@ -13,8 +13,8 @@ const Register = async () => {
     }
     const session = await auth()
 
-    const user = await prisma.user.findFirst({
-        where: { email: session?.user?.email }
+    const user = await prisma.user.findUnique({
+        where: { email: session?.user?.email || '' }
     })
 
     if (user?.password)
