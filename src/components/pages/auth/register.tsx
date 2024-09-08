@@ -22,7 +22,7 @@ const Register = async () => {
 
 
     return (
-        <Paper radius='md' p='xl' withBorder miw={ { base: '100%', sm: 600 } }>
+        <Paper radius='md' p='xl' withBorder miw={ { base: '100%', sm: 600 } } style={ { zIndex: 10 } }>
             <Text size='lg' fw={ 500 }>
                 Welcome to UBCV, register with
             </Text>

@@ -11,7 +11,7 @@ const Hero: React.FC = () => {
                 <Overlay
                     gradient='linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, .65) 40%)'
                     opacity={ 1 }
-                    zIndex={ -1 }
+                    zIndex={ 0 }
                     blur={ 10 }
                 />
                 <Container className={ classes.container } size='md'>

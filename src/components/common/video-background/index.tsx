@@ -1,7 +1,6 @@
 import React from 'react';
 
 import classes from './component.module.css';
-import { Overlay } from '@mantine/core';
 
 interface VideoBackgroundProps extends React.PropsWithChildren {
     src: string;
@@ -13,7 +12,7 @@ interface VideoBackgroundProps extends React.PropsWithChildren {
 const VideoBackground = (props: VideoBackgroundProps) => {
     return (
         <div className={ classes.main }>
-            <video className={ classes.video } { ...props }>
+            <video className={ classes.video } autoPlay loop muted>
                 <source src='/background.mp4' type='video/mp4' />
             </video>
             { props.children }

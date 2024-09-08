@@ -11,7 +11,7 @@ const Login = () => {
     }
 
     return (
-        <Paper radius='md' p='xl' withBorder miw={ { base: '100%', sm: 400 } }>
+        <Paper radius='md' p='xl' withBorder miw={ { base: '100%', sm: 400 } } style={ { zIndex: 10 } }>
             <Text size='lg' fw={ 500 }>
                 Welcome to UBCV, login with
             </Text>

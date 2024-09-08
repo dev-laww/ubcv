@@ -1,6 +1,5 @@
 import { Center, Overlay } from '@mantine/core';
 import { Register as Page } from '@pages/auth';
-import { auth } from '@lib/auth';
 import { VideoBackground } from '@components/common';
 
 export const metadata = {

@@ -9,7 +9,7 @@ export const metadata = {
 const Login = () => {
     return (
         <VideoBackground src='/background.mp4' autoPlay loop muted>
-            <Overlay zIndex={ -1 } blur={ 10 } />
+            <Overlay zIndex={ 0 } blur={ 10 } />
             <Center h='100vh' p='md'>
                 <Page />
             </Center>
