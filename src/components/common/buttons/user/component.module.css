@@ -1,0 +1,29 @@
+.user {
+    display: block;
+    width: 100%;
+    padding: var(--mantine-spacing-md);
+    color: var(--mantine-color-white);
+    border-radius: var(--mantine-radius-sm);
+
+    @mixin hover {
+        color: var(--mantine-primary-color-9);
+        background-color: var(--mantine-primary-color-3);
+
+        .email {
+            color: var(--mantine-primary-color-9);
+        }
+
+        .avatar {
+            color: var(--mantine-primary-color-9);
+        }
+    }
+}
+
+.email {
+    color: var(--mantine-primary-color-2);
+}
+
+.avatar {
+    color: var(--mantine-primary-color-2);
+    margin-right: var(--mantine-spacing-xs);
+}
