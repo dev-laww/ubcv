@@ -6,7 +6,7 @@ import { PasswordStrength } from '@components/common/inputs';
 import React from 'react';
 import { Session } from 'next-auth';
 import { hasLength, isEmail, matches, useField, useForm } from '@mantine/form';
-import { available, register } from '@actions/register';
+import { available, register } from '@lib/actions/register';
 import { getStrength } from '@utils/password';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';

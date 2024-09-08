@@ -56,10 +56,10 @@
         "src/lib"
       ],
       "@actions/*": [
-        "src/actions/*"
+        "src/lib/actions/*"
       ],
       "@actions": [
-        "src/actions"
+        "src/lib/actions"
       ]
     }
   },
