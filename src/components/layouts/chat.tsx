@@ -1,10 +1,12 @@
 'use client'
 
-import { AppShell, Burger, Flex, Group, ScrollArea, Skeleton } from '@mantine/core';
+import { ActionIcon, AppShell, Burger, Flex, Group } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import React from 'react';
 import { Navigation } from '@components/common';
 import { Session } from 'next-auth';
+import { IconEdit, IconLayoutSidebar } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
 
 interface ChatProps extends React.PropsWithChildren {
     session: Session;
@@ -14,6 +16,7 @@ const Chat: React.FC<Readonly<ChatProps>> = ({ children, session }) => {
     const [ mobileOpened, { toggle: toggleMobile } ] = useDisclosure();
     const [ desktopOpened, { toggle: toggleDesktop } ] = useDisclosure(true);
     const matches = useMediaQuery('(max-width: 62em)');
+    const router = useRouter()
 
     return (
         <AppShell
@@ -25,33 +28,46 @@ const Chat: React.FC<Readonly<ChatProps>> = ({ children, session }) => {
             } }
             withBorder={ false }
             padding='md'
-
         >
             <AppShell.Header bg='puceRed'>
-                <Group h='100%' px='md'>
+                <Group h='100%' px='md' justify='space-between'>
                     <Burger
                         opened={ mobileOpened }
                         onClick={ toggleMobile }
                         hiddenFrom='md' size='sm'
                         color='puceRed.1'
                     />
+
+                    <ActionIcon color='puceRed.1' variant='transparent' onClick={ () => router.push('/chat') }>
+                        <IconEdit stroke={ 1.5 } />
+                    </ActionIcon>
                 </Group>
             </AppShell.Header>
 
             <AppShell.Navbar p='md' bg='puceRed'>
+                <Group w='100%' justify='space-between' visibleFrom='sm'>
+                    <ActionIcon color='puceRed.1' variant='transparent' onClick={ toggleDesktop }>
+                        <IconLayoutSidebar stroke={ 1.5 } />
+                    </ActionIcon>
+                    <ActionIcon color='puceRed.1' variant='transparent' onClick={ () => router.push('/chat') }>
+                        <IconEdit stroke={ 1.5 } />
+                    </ActionIcon>
+                </Group>
                 <Navigation session={ session } />
             </AppShell.Navbar>
 
             <AppShell.Main mah='100vh' style={ { display: 'flex' } }>
                 <Flex direction='column' w='100%'>
-                    <Burger
-                        opened={ desktopOpened }
-                        onClick={ toggleDesktop }
-                        visibleFrom='md'
-                        size='sm'
-                        pos='fixed'
-                        style={ { zIndex: 999 } }
-                    />
+                    { !desktopOpened && (
+                        <Group visibleFrom='sm'>
+                            <ActionIcon variant='transparent' onClick={ toggleDesktop }>
+                                <IconLayoutSidebar />
+                            </ActionIcon>
+                            <ActionIcon variant='transparent' onClick={ () => router.push('/chat') }>
+                                <IconEdit stroke={ 1.5 } />
+                            </ActionIcon>
+                        </Group>
+                    ) }
                     { children }
                 </Flex>
             </AppShell.Main>
