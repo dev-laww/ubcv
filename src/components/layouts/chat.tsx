@@ -1,7 +1,7 @@
 'use client'
 
-import { AppShell, Box, Burger, Group } from '@mantine/core';
-import { useDisclosure, useHeadroom, useMediaQuery } from '@mantine/hooks';
+import { AppShell, Burger, Flex, Group } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import React from 'react';
 
 
@@ -28,8 +28,8 @@ const Chat: React.FC<Readonly<React.PropsWithChildren>> = ({ children }) => {
             <AppShell.Navbar p='md'>
 
             </AppShell.Navbar>
-            <AppShell.Main mah='100vh'>
-                <Box>
+            <AppShell.Main mah='100vh' style={ { display: 'flex' } }>
+                <Flex direction='column' w='100%'>
                     <Burger
                         opened={ desktopOpened }
                         onClick={ toggleDesktop }
@@ -39,7 +39,7 @@ const Chat: React.FC<Readonly<React.PropsWithChildren>> = ({ children }) => {
                         style={ { zIndex: 999 } }
                     />
                     { children }
-                </Box>
+                </Flex>
             </AppShell.Main>
         </AppShell>
     );

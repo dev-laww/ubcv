@@ -15,6 +15,7 @@ const RootLayout = ({ children }: Readonly<React.PropsWithChildren>) => {
         <head>
             <ColorSchemeScript />
             <link rel='shortcut icon' href='/favicon.svg' />
+            <link rel='stylesheet' href='https://cdn.oaistatic.com/assets/root-dunwnenm.css' />
             <meta
                 name='viewport'
                 content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no'
