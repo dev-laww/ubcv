@@ -7,6 +7,7 @@ import { Notifications } from '@mantine/notifications';
 
 import '@mantine/notifications/styles.css'
 import '@mantine/core/styles.css';
+import '@mantine/tiptap/styles.css';
 
 const Providers: React.FC<Readonly<React.PropsWithChildren>> = ({ children }) => {
     return (
