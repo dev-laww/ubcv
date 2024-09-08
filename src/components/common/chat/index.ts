@@ -1,1 +1,2 @@
-export { Ai } from './ai';
+export { AiChat } from './ai';
+export { HumanChat } from './human';
