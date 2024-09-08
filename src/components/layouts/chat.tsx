@@ -1,11 +1,16 @@
 'use client'
 
-import { AppShell, Burger, Flex, Group } from '@mantine/core';
+import { AppShell, Burger, Flex, Group, ScrollArea, Skeleton } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import React from 'react';
+import { Navigation } from '@components/common';
+import { Session } from 'next-auth';
 
+interface ChatProps extends React.PropsWithChildren {
+    session: Session;
+}
 
-const Chat: React.FC<Readonly<React.PropsWithChildren>> = ({ children }) => {
+const Chat: React.FC<Readonly<ChatProps>> = ({ children, session }) => {
     const [ mobileOpened, { toggle: toggleMobile } ] = useDisclosure();
     const [ desktopOpened, { toggle: toggleDesktop } ] = useDisclosure(true);
     const matches = useMediaQuery('(max-width: 62em)');
@@ -18,16 +23,25 @@ const Chat: React.FC<Readonly<React.PropsWithChildren>> = ({ children }) => {
                 breakpoint: 'md',
                 collapsed: { mobile: !mobileOpened, desktop: !desktopOpened }
             } }
+            withBorder={ false }
             padding='md'
+
         >
-            <AppShell.Header>
+            <AppShell.Header bg='puceRed'>
                 <Group h='100%' px='md'>
-                    <Burger opened={ mobileOpened } onClick={ toggleMobile } hiddenFrom='md' size='sm' />
+                    <Burger
+                        opened={ mobileOpened }
+                        onClick={ toggleMobile }
+                        hiddenFrom='md' size='sm'
+                        color='puceRed.1'
+                    />
                 </Group>
             </AppShell.Header>
-            <AppShell.Navbar p='md'>
 
+            <AppShell.Navbar p='md' bg='puceRed'>
+                <Navigation session={ session } />
             </AppShell.Navbar>
+
             <AppShell.Main mah='100vh' style={ { display: 'flex' } }>
                 <Flex direction='column' w='100%'>
                     <Burger
