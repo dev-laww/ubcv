@@ -29,8 +29,22 @@ model User {
   accounts      Account[]
   sessions      Session[]
   conversations Conversation[]
+  settings      UserSettings?
 
   @@map("users")
+}
+
+model UserSettings {
+  id     String @id @default(cuid())
+  userId String @unique @map("user_id")
+
+  avatar String?
+  voice  String? // TODO: Add enum for voice
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Conversation {
@@ -102,6 +116,6 @@ model Session {
 }
 
 enum SenderType {
-  USER
-  BOT
+  HUMAN @map("human")
+  AI    @map("ai")
 }
