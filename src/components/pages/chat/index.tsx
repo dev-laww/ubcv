@@ -4,6 +4,9 @@ import { Box, Container, Flex, Group, ScrollArea } from '@mantine/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { Message } from '@components/forms';
 import { useElementSize } from '@mantine/hooks';
+import dynamic from 'next/dynamic'
+
+const Avatar = dynamic(() => import('./avatar').then(mod => mod.Avatar), { ssr: false })
 
 
 const Chat = () => {
@@ -38,6 +41,7 @@ const Chat = () => {
                 </Box>
             </Flex>
             <Box visibleFrom='sm'>
+                <Avatar  position={ [ -1, -2, 5 ] } scale={ 1.4 } avatar='avatars/avatar.glb'/>
             </Box>
         </Group>
     )
