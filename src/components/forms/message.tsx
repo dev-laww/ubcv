@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react';
 import { ActionIcon, TextInput } from '@mantine/core';
 import { IconSend2 } from '@tabler/icons-react';
