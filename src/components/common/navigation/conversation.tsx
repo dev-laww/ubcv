@@ -3,27 +3,24 @@
 import classes from './component.module.css';
 import React from 'react';
 import { usePathname } from 'next/navigation';
-
-interface Conversation {
-    link: string;
-    label: string;
-}
+import { Conversation as Item } from '@prisma/client';
 
 interface ConversationProps {
-    item: Conversation;
+    data: Item;
 }
 
-const Conversation: React.FC<Readonly<ConversationProps>> = ({ item }) => {
+const Conversation: React.FC<Readonly<ConversationProps>> = ({ data }) => {
     const pathname = usePathname();
+    const url = `/chat?thread=${ data.id }`;
 
+    // TODO: Add title prompt
     return (
         <a
             className={ classes.link }
-            data-active={ pathname === item.link || undefined }
-            href={ item.link }
-            key={ item.label }
+            data-active={ pathname === url || undefined }
+            href={ url }
         >
-            <span>{ item.label }</span>
+            <span>{ data.id }</span>
         </a>
     )
 }

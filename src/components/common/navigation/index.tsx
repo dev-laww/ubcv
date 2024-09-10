@@ -1,39 +1,28 @@
+'use client'
+
 import { AppShell, ScrollArea } from '@mantine/core';
 import { Logo } from '@components/common';
 import classes from './component.module.css';
 import { User } from '@components/common/buttons';
 import { Session } from 'next-auth';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Conversation as Model } from '@prisma/client';
+import { useSearchParams } from 'next/navigation';
+import { all } from '@actions/conversation'
 import { Conversation } from '@components/common/navigation/conversation';
-
-const data = [
-    { link: '', label: 'Notifications' },
-    { link: '', label: 'Billing' },
-    { link: '', label: 'Security' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'SSH Keys' },
-    { link: '', label: 'Databases' }
-
-];
 
 interface NavigationProps extends React.PropsWithChildren {
     session: Session;
 }
 
 const Navigation: React.FC<Readonly<NavigationProps>> = ({ session }) => {
-    const links = data.map(item => <Conversation item={ item } key={ item.label } />);
+    const [ conversations, setConversations ] = useState<Model[]>([]);
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        all().then(setConversations);
+    }, [ searchParams ]);
+
     return (
         <>
             <AppShell.Section className={ classes.header }>
@@ -41,7 +30,7 @@ const Navigation: React.FC<Readonly<NavigationProps>> = ({ session }) => {
             </AppShell.Section>
 
             <AppShell.Section grow component={ ScrollArea } scrollbarSize={ 5 } offsetScrollbars>
-                { links }
+                { conversations.map(conversation => <Conversation key={ conversation.id } data={ conversation } />) }
             </AppShell.Section>
 
             <AppShell.Section>
