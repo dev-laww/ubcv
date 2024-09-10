@@ -19,7 +19,6 @@ const Message: React.FC = () => {
         if (!values.message || loading) return
 
         form.reset()
-        console.log(values)
         setLoading(true)
 
         try {
@@ -35,7 +34,7 @@ const Message: React.FC = () => {
 
             const response = await message({ thread: thread || id, input: values.message })
 
-            console.log(response)
+            // TODO: Handle response
         } catch (error) {
             console.error(error)
         } finally {
