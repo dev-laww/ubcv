@@ -15,7 +15,7 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(uuid())
   name          String?
   email         String?   @unique
   username      String?   @unique
@@ -35,7 +35,7 @@ model User {
 }
 
 model UserSettings {
-  id     String @id @default(cuid())
+  id     String @id @default(uuid())
   userId String @unique @map("user_id")
 
   avatar String?
@@ -48,18 +48,18 @@ model UserSettings {
 }
 
 model Conversation {
-  id     String @id @default(cuid())
+  id     String @id @default(uuid())
   userId String @map("user_id")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user     User      @relation(fields: [userId], references: [id])
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   messages Message[]
 }
 
 model Message {
-  id             String     @id @default(cuid())
+  id             String     @id @default(uuid())
   conversationId String     @map("conversation_id")
   senderType     SenderType @map("sender_type")
   content        String
@@ -67,7 +67,7 @@ model Message {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  conversation Conversation @relation(fields: [conversationId], references: [id])
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -80,7 +80,7 @@ model VerificationToken {
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(uuid())
   userId            String  @map("user_id")
   type              String
   provider          String
@@ -103,7 +103,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
   sessionToken String   @unique @map("session_token")
   userId       String   @map("user_id")
   expires      DateTime
