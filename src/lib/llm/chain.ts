@@ -1,60 +1,83 @@
 import { Ollama } from '@langchain/ollama';
-import { Context } from '@lib/llm/context';
-import {
-    RunnableConfig,
-    RunnablePassthrough,
-    RunnableSequence,
-    RunnableWithMessageHistory
-} from '@langchain/core/runnables';
+import { RunnableConfig, RunnableWithMessageHistory } from '@langchain/core/runnables';
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
-import { formatDocumentsAsString } from 'langchain/util/document';
+import { VectorStoreRetriever } from '@langchain/core/vectorstores';
+import { Context } from '@lib/llm/context';
+import { createHistoryAwareRetriever } from 'langchain/chains/history_aware_retriever';
+import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
+import { createRetrievalChain } from 'langchain/chains/retrieval';
 import { MessageHistory } from '@lib/llm/message-history';
 
-const model = new Ollama({ model: 'llama3.1', temperature: 0.5 });
 
-const systemPrompt = `
+const CONTEXTUALIZE_Q_PROMPT = `
+    Given a chat history and the latest user question or statement,
+    which might reference context in the chat history, formulate a standalone answer 
+    which can be understood without the chat history.
+`;
+
+const QA_PROMPT = `
     You are an assistant for question-answering tasks.
     Use the following pieces of retrieved context to answer the question.
     If you don't know the answer, just say that you don't know.
     Use three sentences maximum and keep the answer concise.
     
     {context}
- `;
+`;
 
-const prompt = ChatPromptTemplate.fromMessages([
-    [ 'system', systemPrompt ],
-    new MessagesPlaceholder('history'),
-    [ 'human', '{input}' ]
-])
 
-const chain = async (sessionId: string) => {
-    const retriever = await Context.loadLocal('./test.pdf')
-    const config: RunnableConfig = { configurable: { sessionId } };
+class Chain {
+    static llm = new Ollama({ model: 'llama3.1', temperature: 0.5 });
 
-    const runnable = RunnableSequence.from([
-        RunnablePassthrough.assign({
-            context: async (input: Record<string, unknown>) => {
-                const relevantDocs = await retriever.invoke(input.input as string);
-                return formatDocumentsAsString(relevantDocs);
-            }
-        }),
-        prompt,
-        model
+    static contextualizeQPrompt = ChatPromptTemplate.fromMessages([
+        [ 'system', CONTEXTUALIZE_Q_PROMPT ],
+        new MessagesPlaceholder('chat_history'),
+        [ 'human', '{input}' ]
     ]);
 
-    return new RunnableWithMessageHistory({
-        runnable,
-        getMessageHistory: (sessionId) => new MessageHistory({ sessionId }),
-        inputMessagesKey: 'input',
-        historyMessagesKey: 'history',
-        config
-    });
+    static qAPrompt = ChatPromptTemplate.fromMessages([
+        [ 'system', QA_PROMPT ],
+        new MessagesPlaceholder('chat_history'),
+        [ 'human', '{input}' ]
+    ]);
+
+    static async assemble(retriever: VectorStoreRetriever, config: RunnableConfig = {}) {
+        const historyAwareRetriever = await createHistoryAwareRetriever({
+            llm: Chain.llm,
+            retriever,
+            rephrasePrompt: Chain.contextualizeQPrompt
+        });
+
+        const combineDocsChain = await createStuffDocumentsChain({
+            llm: Chain.llm,
+            prompt: Chain.qAPrompt
+        })
+
+        const rag = await createRetrievalChain({
+            retriever: historyAwareRetriever,
+            combineDocsChain
+        })
+
+        return new RunnableWithMessageHistory({
+            runnable: rag,
+            getMessageHistory: (sessionId: string) => new MessageHistory({ sessionId }),
+            inputMessagesKey: 'input',
+            historyMessagesKey: 'chat_history',
+            outputMessagesKey: 'answer'
+        })
+    }
+
+    static async session(sessionId: string) {
+        const retriever = await Context.loadLocal('./test.pdf'); // TODO: load actual context
+
+        const chain = await Chain.assemble(retriever);
+
+        const config = { configurable: { sessionId } }
+
+        const invoke = async (input: string) => chain.invoke({ input }, config);
+        const stream = async (input: string) => chain.stream({ input }, config);
+
+        return { ...chain, invoke, stream };
+    }
 }
 
-(async () => {
-    await chain('cm0vbkfer0000dqkm3as5be09')
-
-    console.log('done')
-})()
-
-
+export { Chain };
