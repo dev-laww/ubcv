@@ -41,7 +41,7 @@ const Chat = () => {
                 </Box>
             </Flex>
             <Box visibleFrom='sm'>
-                <Avatar  position={ [ -1, -2, 5 ] } scale={ 1.4 } avatar='avatars/avatar.glb'/>
+                <Avatar position={ [ -1, -2, 5 ] } scale={ 1.4 } avatar='avatars/avatar.glb' />
             </Box>
         </Group>
     )
