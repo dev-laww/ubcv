@@ -72,7 +72,7 @@ const Register = ({ session }: RegisterProps) => {
             loading: false
         })
 
-        session ? router.push('/') : router.push('/auth/login')
+        session ? router.push('/chat') : router.push('/auth/login')
     };
 
     return (
