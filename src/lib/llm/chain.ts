@@ -1,5 +1,5 @@
 import { Ollama } from '@langchain/ollama';
-import { RunnableConfig, RunnableWithMessageHistory } from '@langchain/core/runnables';
+import { Runnable, RunnableConfig, RunnableWithMessageHistory } from '@langchain/core/runnables';
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
 import { VectorStoreRetriever } from '@langchain/core/vectorstores';
 import { Context } from '@lib/llm/context';
@@ -7,6 +7,7 @@ import { createHistoryAwareRetriever } from 'langchain/chains/history_aware_retr
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import { MessageHistory } from '@lib/llm/message-history';
+import { IterableReadableStream } from '@langchain/core/dist/utils/stream';
 
 
 const CONTEXTUALIZE_Q_PROMPT = `
@@ -24,9 +25,16 @@ const QA_PROMPT = `
     {context}
 `;
 
+interface Session {
+    chain: Runnable;
+    invoke: (input: string) => Promise<{ context: Document[], answer: string }>;
+    stream: (input: string) => Promise<IterableReadableStream<any>>;
+}
 
 class Chain {
     static llm = new Ollama({ model: 'llama3.1', temperature: 0.5 });
+    static retriever: VectorStoreRetriever;
+    static chain: Runnable;
 
     static contextualizeQPrompt = ChatPromptTemplate.fromMessages([
         [ 'system', CONTEXTUALIZE_Q_PROMPT ],
@@ -57,26 +65,29 @@ class Chain {
             combineDocsChain
         })
 
-        return new RunnableWithMessageHistory({
-            runnable: rag,
-            getMessageHistory: (sessionId: string) => new MessageHistory({ sessionId }),
-            inputMessagesKey: 'input',
-            historyMessagesKey: 'chat_history',
-            outputMessagesKey: 'answer'
-        })
+        if (!this.chain)
+            this.chain = new RunnableWithMessageHistory({
+                runnable: rag,
+                getMessageHistory: (sessionId: string) => new MessageHistory({ sessionId }),
+                inputMessagesKey: 'input',
+                historyMessagesKey: 'chat_history',
+                outputMessagesKey: 'answer'
+            })
+
+        return this.chain;
     }
 
     static async session(sessionId: string) {
-        const retriever = await Context.loadLocal('./test.pdf'); // TODO: load actual context
+        if (!this.retriever)
+            this.retriever = await Context.loadLocal('./test.pdf'); // TODO: load actual context
 
-        const chain = await Chain.assemble(retriever);
+        const chain = await Chain.assemble(this.retriever);
 
         const config = { configurable: { sessionId } }
-
         const invoke = async (input: string) => chain.invoke({ input }, config);
         const stream = async (input: string) => chain.stream({ input }, config);
 
-        return { ...chain, invoke, stream };
+        return { chain, invoke, stream } as Session;
     }
 }
 
