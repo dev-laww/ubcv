@@ -66,7 +66,7 @@ const User: React.FC<Readonly<UserButtonProps>> = ({ session }) => {
                         shadow='md'
                         p='sm'
                         pos='absolute'
-                        bottom={ ref.current?.clientHeight || 0 }
+                        bottom={ (ref.current?.clientHeight || 0) + 5 }
                         left={ 0 }
                         right={ 0 }
                         ref={ clickOutsideRef }

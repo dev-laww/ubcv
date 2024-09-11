@@ -27,7 +27,7 @@ const Settings = () => {
     const [ opened, { open, close } ] = useDisclosure()
     const { ref, hovered } = useHover()
     const matches = useMediaQuery('(min-width: 62em)')
-    const { settings, update } = useSettings() as SettingsContextType
+    const { settings, update, deleteAllChat } = useSettings() as SettingsContextType
     const [ loading, setLoading ] = useState(false)
     const form = useForm({
         initialValues: {
@@ -68,6 +68,25 @@ const Settings = () => {
         })
     }
 
+    const deleteChats = async () => {
+        const id = notifications.show({
+            title: 'Deleting chats...',
+            message: 'Please wait...',
+            autoClose: false,
+            loading: true
+        })
+
+        await deleteAllChat()
+
+        notifications.update({
+            id,
+            title: 'Chats deleted',
+            message: 'All chats have been deleted',
+            autoClose: 2000,
+            loading: false
+        })
+    }
+
     return (
         <>
             <Modal
@@ -98,7 +117,13 @@ const Settings = () => {
                     <Tabs.Panel value='general' px='sm' py={ !matches && 'sm' || undefined }>
                         <Group pl='sm' justify='space-between'>
                             <Text>Delete all chats</Text>
-                            <Button color='puceRed' radius='xl'>Delete Chats</Button>
+                            <Button
+                                onClick={ deleteChats }
+                                color='puceRed'
+                                radius='xl'
+                            >
+                                Delete Chats
+                            </Button>
                         </Group>
                     </Tabs.Panel>
                     <Tabs.Panel value='personalization' px='sm' py={ !matches && 'sm' || undefined }>
@@ -122,8 +147,13 @@ const Settings = () => {
                                     </Group>
                                 </Stack>
 
-                                <Button type='submit' style={ { alignSelf: 'flex-end' } }
-                                        loading={ loading }>Save</Button>
+                                <Button
+                                    type='submit'
+                                    style={ { alignSelf: 'flex-end' } }
+                                    loading={ loading }
+                                >
+                                    Save
+                                </Button>
                             </Stack>
                         </form>
                     </Tabs.Panel>

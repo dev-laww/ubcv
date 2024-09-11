@@ -34,3 +34,14 @@ export const update = async (settings: Settings) => {
         data
     });
 }
+
+export const deleteAllChat = async () => {
+    const { user } = await auth() || {}
+    const { email } = user || {}
+
+    if (!email) return
+
+    await prisma.conversation.deleteMany({
+        where: { user: { email } }
+    })
+}
