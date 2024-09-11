@@ -32,11 +32,12 @@ const Message: React.FC<Readonly<MessageProps>> = ({ send }) => {
                 { ...form.getInputProps('message') }
                 autoComplete='off'
                 radius='xl'
+                size='md'
                 placeholder='Type a message'
                 rightSection={ (
                     <ActionIcon
-                        color={ form.values.message.length > 0 ? 'puceRed' : 'dimmed' }
-                        style={{ pointerEvents: form.values.message.length > 0 ? 'auto' : 'none' }}
+                        color={ form.values.message.length > 0 || loading ? 'puceRed' : 'dimmed' }
+                        style={ { pointerEvents: form.values.message.length > 0 ? 'auto' : 'none' } }
                         variant='transparent'
                         type='submit'
                         loading={ loading }
