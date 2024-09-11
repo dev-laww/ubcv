@@ -12,6 +12,13 @@ export const all = async () => {
     });
 }
 
+export const get = async (id: string) => {
+    return prisma.message.findMany({
+        where: { conversation: { id } },
+        orderBy: { createdAt: 'asc' }
+    })
+}
+
 const generateTitle = async (id: string) => {
     // TODO: Implement title generation
 
