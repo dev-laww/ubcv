@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { get } from '@actions/conversation';
 import { AiChat, HumanChat } from '@components/common/chat';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -10,23 +10,14 @@ export const useChat = () => {
     const [ conversation, setConversation ] = useState<React.ReactNode[]>([])
     const router = useRouter()
 
-    const send = async (input: string) => {
-        const thread = searchParams.get('thread')
-        let id: string = ''
-
-        if (!thread) {
-            id = await create()
-
-            router.replace(`/chat?thread=${ id }`)
-        }
-
+    const send = useCallback(async (input: string) => {
         setConversation(messages => [
             ...messages,
             <HumanChat content={ input } key={ Math.random() } />
         ])
 
         try {
-
+            const thread = searchParams.get('thread')
             let id: string = ''
 
             if (!thread) {
@@ -50,12 +41,15 @@ export const useChat = () => {
             console.error(error)
             setHasError(true)
         }
-    }
+    }, [ router, searchParams ]);
 
     useEffect(() => {
         const thread = searchParams.get('thread')
 
-        if (!thread) return
+        if (!thread) {
+            setConversation([])
+            return
+        }
 
         const getConversation = async () => {
             const messages = await get(thread)

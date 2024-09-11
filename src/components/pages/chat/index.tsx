@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Message } from '@components/forms';
 import { useElementSize } from '@mantine/hooks';
 import dynamic from 'next/dynamic'
-import { useSettings } from '@hooks';
+import { useChat, useSettings } from '@hooks';
 import { Settings } from '@types'
 
 const Avatar = dynamic(() => import('./avatar').then(mod => mod.Avatar), { ssr: false })
@@ -13,10 +13,10 @@ const Avatar = dynamic(() => import('./avatar').then(mod => mod.Avatar), { ssr: 
 
 const Chat = () => {
     const viewport = useRef<HTMLDivElement>(null);
-    const [ content, setContent ] = useState<React.ReactNode[]>([]); // TODO: Replace with messages or create a hook for managing chat messages
     const { ref, height } = useElementSize()
     const { settings } = useSettings() as { settings: Settings }
     const [ avatar, setAvatar ] = useState('avatars/avatar.glb')
+    const { send, conversation, hasError } = useChat()
 
     useEffect(() => {
         if (!settings) return
@@ -41,12 +41,12 @@ const Chat = () => {
                     offsetScrollbars
                 >
                     <Container size='sm' py='lg' ref={ ref }>
-                        {/*    content here   */ }
+                        { conversation }
                     </Container>
                 </ScrollArea>
                 <Box w='100%' mb='xl'>
                     <Container size='sm'>
-                        <Message />
+                        <Message send={ send } />
                     </Container>
                 </Box>
             </Flex>

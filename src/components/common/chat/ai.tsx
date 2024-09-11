@@ -5,6 +5,9 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { createLowlight } from 'lowlight';
 import ts from 'highlight.js/lib/languages/typescript';
 import { motion, Transition } from 'framer-motion';
+import { useCallback, useEffect, useState } from 'react';
+import { marked } from 'marked';
+import { random } from '@utils/number';
 
 const lowlight = createLowlight();
 
@@ -127,27 +130,63 @@ function Loading() {
 
 interface AiProps {
     loading?: boolean;
+    content?: string;
+    slice?: boolean;
 }
 
-const AiChat = ({ loading }: AiProps) => {
+const AiChat = ({ loading, content, slice }: AiProps) => {
+    const [ message, setMessage ] = useState('');
     const editor = useEditor({
         extensions: [
             StarterKit.configure({ codeBlock: false }),
             CodeBlockLowlight.configure({ lowlight })
         ],
-        immediatelyRender: false
+        content: '',
+        editable: false
     });
 
-    // editor?.commands.setContent
+    const parse = useCallback(async (chat: string) => {
+        const parsedContent = await marked.parse(escapeHtml(chat));
+        editor?.commands.setContent(parsedContent);
+    }, [ editor ]);
 
+    useEffect(() => {
+        if (!content) return;
 
-    return (
-        loading ? <Loading /> : (
-            <RichTextEditor editor={ editor } style={ { border: 'none' } }>
-                <RichTextEditor.Content />
-            </RichTextEditor>
-        )
+        if (!slice) {
+            setMessage(content);
+            return;
+        }
+
+        // TODO: Implement tts
+        const words = content.split(' ');
+        let index = 0;
+        const interval = setInterval(() => {
+            setMessage(words.slice(0, index + 1).join(' '));
+            index++;
+
+            if (index === words.length)
+                clearInterval(interval);
+
+        }, random({ min: 50, max: 100 }));
+
+        return () => clearInterval(interval);
+
+    }, [ content, slice ]);
+
+    useEffect(() => {
+        if (!message) return;
+
+        parse(message).then();
+    }, [ message, parse ]);
+
+    return loading ? (
+        <Loading />
+    ) : (
+        <RichTextEditor editor={ editor } style={ { border: 'none', pointerEvents: 'none' } }>
+            <RichTextEditor.Content />
+        </RichTextEditor>
     );
-}
+};
 
 export { AiChat };

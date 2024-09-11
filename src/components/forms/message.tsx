@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import { ActionIcon, TextInput } from '@mantine/core';
 import { IconSend2 } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { create, message } from '@actions/message';
 
-const Message: React.FC = () => {
+interface MessageProps {
+    send: (input: string) => Promise<void>
+}
+
+const Message: React.FC<Readonly<MessageProps>> = ({ send }) => {
     const [ loading, setLoading ] = useState(false)
-    const searchParams = useSearchParams()
-    const router = useRouter()
     const form = useForm({
         initialValues: { message: '' }
     })
@@ -21,25 +21,9 @@ const Message: React.FC = () => {
         form.reset()
         setLoading(true)
 
-        try {
-            const thread = searchParams.get('thread')
+        await send(values.message)
 
-            let id: string = ''
-
-            if (!thread) {
-                id = await create()
-
-                router.replace(`/chat?thread=${ id }`)
-            }
-
-            const response = await message({ thread: thread || id, input: values.message })
-
-            // TODO: Handle response
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setLoading(false)
-        }
+        setLoading(false)
     }
 
     return (
