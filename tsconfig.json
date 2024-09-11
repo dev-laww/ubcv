@@ -60,6 +60,18 @@
       ],
       "@actions": [
         "src/lib/actions"
+      ],
+      "@types/*": [
+        "src/types/*"
+      ],
+      "@types": [
+        "src/types"
+      ],
+      "@context/*": [
+        "src/context/*"
+      ],
+      "@context": [
+        "src/context"
       ]
     }
   },
