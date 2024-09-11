@@ -11,7 +11,8 @@ import { Settings as SettingsType } from '@types';
 import { notifications } from '@mantine/notifications';
 import { Voice } from '@prisma/client';
 import { SettingsContextType } from '@context';
-import { useRouter } from 'next/navigation';
+import { modals } from '@mantine/modals';
+import { all } from '@actions/conversation';
 
 
 const voices = [
@@ -70,6 +71,10 @@ const Settings = () => {
     }
 
     const deleteChats = async () => {
+        const conversations = await all()
+
+        if (conversations.length === 0) return
+
         const id = notifications.show({
             title: 'Deleting chats...',
             message: 'Please wait...',
@@ -88,6 +93,16 @@ const Settings = () => {
             onClose: () => window.location.replace('/chat')
         })
     }
+
+    const openDeleteConfirmation = () => modals.openConfirmModal({
+        id: 'delete-chats',
+        title: 'Delete all chats',
+        centered: true,
+        style: { height: 'fit-content !important' },
+        children: 'Are you sure you want to delete all chats?',
+        onConfirm: deleteChats,
+        labels: { cancel: 'No', confirm: 'Yes' }
+    })
 
     return (
         <>
@@ -120,7 +135,7 @@ const Settings = () => {
                         <Group pl='sm' justify='space-between'>
                             <Text>Delete all chats</Text>
                             <Button
-                                onClick={ deleteChats }
+                                onClick={ openDeleteConfirmation }
                                 color='puceRed'
                                 radius='xl'
                             >

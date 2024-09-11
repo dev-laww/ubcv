@@ -6,3 +6,7 @@
 .mantine-Modal-body {
     height: 85%;
 }
+
+[aria-describedby="delete-chats-body"] {
+    height: auto;
+}

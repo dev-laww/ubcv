@@ -8,13 +8,16 @@ import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css'
 import '@mantine/core/styles.css';
 import '@mantine/tiptap/styles.css';
+import { ModalsProvider } from '@mantine/modals';
 
 const Providers: React.FC<Readonly<React.PropsWithChildren>> = ({ children }) => {
     return (
         <SessionProvider>
             <MantineProvider theme={ theme }>
-                <Notifications />
-                { children }
+                <ModalsProvider>
+                    <Notifications />
+                    { children }
+                </ModalsProvider>
             </MantineProvider>
         </SessionProvider>
     )
