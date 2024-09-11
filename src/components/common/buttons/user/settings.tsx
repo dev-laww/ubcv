@@ -11,6 +11,7 @@ import { Settings as SettingsType } from '@types';
 import { notifications } from '@mantine/notifications';
 import { Voice } from '@prisma/client';
 import { SettingsContextType } from '@context';
+import { useRouter } from 'next/navigation';
 
 
 const voices = [
@@ -83,7 +84,8 @@ const Settings = () => {
             title: 'Chats deleted',
             message: 'All chats have been deleted',
             autoClose: 2000,
-            loading: false
+            loading: false,
+            onClose: () => window.location.replace('/chat')
         })
     }
 
