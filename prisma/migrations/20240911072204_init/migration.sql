@@ -1,5 +1,8 @@
 -- CreateEnum
-CREATE TYPE "SenderType" AS ENUM ('human', 'ai');
+CREATE TYPE "MessageType" AS ENUM ('HUMAN', 'AI');
+
+-- CreateEnum
+CREATE TYPE "Voice" AS ENUM ('ALLOY', 'ECHO', 'FABLE', 'ONYX', 'NOVA', 'SHIMMER');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -20,8 +23,8 @@ CREATE TABLE "users" (
 CREATE TABLE "UserSettings" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
-    "avatar" TEXT,
-    "voice" TEXT,
+    "avatar" TEXT NOT NULL DEFAULT 'avatars/avatar.glb',
+    "voice" "Voice" NOT NULL DEFAULT 'ALLOY',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -42,7 +45,7 @@ CREATE TABLE "Conversation" (
 CREATE TABLE "Message" (
     "id" TEXT NOT NULL,
     "conversation_id" TEXT NOT NULL,
-    "sender_type" "SenderType" NOT NULL,
+    "sender_type" "MessageType" NOT NULL,
     "content" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

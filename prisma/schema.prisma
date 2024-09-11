@@ -38,8 +38,8 @@ model UserSettings {
   id     String @id @default(uuid())
   userId String @unique @map("user_id")
 
-  avatar String?
-  voice  String? // TODO: Add enum for voice
+  avatar String @default("avatars/avatar.glb")
+  voice  Voice  @default(ALLOY)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -59,9 +59,9 @@ model Conversation {
 }
 
 model Message {
-  id             String     @id @default(uuid())
-  conversationId String     @map("conversation_id")
-  senderType     SenderType @map("sender_type")
+  id             String      @id @default(uuid())
+  conversationId String      @map("conversation_id")
+  type           MessageType @map("sender_type")
   content        String
 
   createdAt DateTime @default(now())
@@ -115,7 +115,16 @@ model Session {
   @@map("sessions")
 }
 
-enum SenderType {
-  HUMAN @map("human")
-  AI    @map("ai")
+enum MessageType {
+  HUMAN
+  AI
+}
+
+enum Voice {
+  ALLOY
+  ECHO
+  FABLE
+  ONYX
+  NOVA
+  SHIMMER
 }
