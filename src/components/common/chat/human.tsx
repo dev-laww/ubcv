@@ -8,7 +8,7 @@ interface HumanChatProps {
 const HumanChat: React.FC<Readonly<HumanChatProps>> = ({ content }) => {
     return (
         <Flex justify='flex-end' w='100%' my='sm'>
-            <Paper radius='lg' px='lg' py='sm' w='fit-content' maw='75%' bg='gray.1'>
+            <Paper radius='xl' px='lg' py='xs' w='fit-content' maw='75%' bg='gray.1'>
                 <Text fz='sm'>{ content }</Text>
             </Paper>
         </Flex>

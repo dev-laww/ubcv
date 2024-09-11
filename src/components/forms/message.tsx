@@ -31,10 +31,17 @@ const Message: React.FC<Readonly<MessageProps>> = ({ send }) => {
             <TextInput
                 { ...form.getInputProps('message') }
                 autoComplete='off'
+                radius='xl'
                 placeholder='Type a message'
                 rightSection={ (
-                    <ActionIcon color='puceRed' variant='transparent' type='submit' loading={ loading }>
-                        <IconSend2 />
+                    <ActionIcon
+                        color={ form.values.message.length > 0 ? 'puceRed' : 'dimmed' }
+                        style={{ pointerEvents: form.values.message.length > 0 ? 'auto' : 'none' }}
+                        variant='transparent'
+                        type='submit'
+                        loading={ loading }
+                    >
+                        <IconSend2 stroke={ 1.5 } />
                     </ActionIcon>
                 ) }
             />

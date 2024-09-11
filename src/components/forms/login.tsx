@@ -54,7 +54,7 @@ const Login = () => {
             color: 'green',
             autoClose: 2000
         })
-        router.push('/')
+        router.push('/chat')
     }
 
     return (

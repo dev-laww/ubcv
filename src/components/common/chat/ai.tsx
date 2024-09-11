@@ -142,6 +142,7 @@ const AiChat = ({ loading, content, slice }: AiProps) => {
             CodeBlockLowlight.configure({ lowlight })
         ],
         content: '',
+        immediatelyRender: false,
         editable: false
     });
 
@@ -168,7 +169,7 @@ const AiChat = ({ loading, content, slice }: AiProps) => {
             if (index === words.length)
                 clearInterval(interval);
 
-        }, random({ min: 50, max: 100 }));
+        }, random({ min: 50, max: 150 }));
 
         return () => clearInterval(interval);
 
