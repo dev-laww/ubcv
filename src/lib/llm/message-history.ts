@@ -3,11 +3,10 @@ import {
     BaseMessage,
     mapChatMessagesToStoredMessages,
     mapStoredMessagesToChatMessages,
-    StoredMessage,
     StoredMessageData
 } from '@langchain/core/messages';
 import { prisma } from '@lib/prisma';
-import { Message, SenderType } from '@prisma/client';
+import { MessageType } from '@prisma/client';
 
 interface MessageHistoryOptions {
     sessionId: string;
@@ -31,7 +30,7 @@ class MessageHistory extends BaseListChatMessageHistory {
         });
 
         return mapStoredMessagesToChatMessages(messages.map(msg => ({
-            type: msg.senderType === SenderType.HUMAN ? 'human' : 'ai',
+            type: msg.type === MessageType.HUMAN ? 'human' : 'ai',
             data: { content: msg.content } as StoredMessageData
         })));
     }
@@ -43,7 +42,7 @@ class MessageHistory extends BaseListChatMessageHistory {
             data: {
                 content: stored.data.content,
                 conversationId: this.sessionId,
-                senderType: stored.type === 'human' ? SenderType.HUMAN : SenderType.AI
+                type: stored.type === 'human' ? MessageType.HUMAN : MessageType.AI
             }
         });
     }
@@ -55,7 +54,7 @@ class MessageHistory extends BaseListChatMessageHistory {
             data: stored.map(msg => ({
                 content: msg.data.content,
                 conversationId: this.sessionId,
-                senderType: msg.type === 'human' ? SenderType.HUMAN : SenderType.AI
+                type: msg.type === 'human' ? MessageType.HUMAN : MessageType.AI
             }))
         })
     }

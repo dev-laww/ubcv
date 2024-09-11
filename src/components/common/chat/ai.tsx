@@ -129,7 +129,7 @@ interface AiProps {
     loading?: boolean;
 }
 
-const Ai = ({ loading }: AiProps) => {
+const AiChat = ({ loading }: AiProps) => {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({ codeBlock: false }),
@@ -150,4 +150,4 @@ const Ai = ({ loading }: AiProps) => {
     );
 }
 
-export { Ai };
+export { AiChat };
