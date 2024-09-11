@@ -5,14 +5,24 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Message } from '@components/forms';
 import { useElementSize } from '@mantine/hooks';
 import dynamic from 'next/dynamic'
+import { useSettings } from '@hooks';
+import { Settings } from '@types'
 
 const Avatar = dynamic(() => import('./avatar').then(mod => mod.Avatar), { ssr: false })
 
 
 const Chat = () => {
     const viewport = useRef<HTMLDivElement>(null);
-    const [ content, setContent ] = useState<React.ReactNode[]>([]);
+    const [ content, setContent ] = useState<React.ReactNode[]>([]); // TODO: Replace with messages or create a hook for managing chat messages
     const { ref, height } = useElementSize()
+    const { settings } = useSettings() as { settings: Settings }
+    const [ avatar, setAvatar ] = useState('avatars/avatar.glb')
+
+    useEffect(() => {
+        if (!settings) return
+
+        setAvatar(settings.avatar)
+    }, [ settings ])
 
     useEffect(() => {
         const { scrollHeight, clientHeight, scrollTop } = viewport.current!
@@ -41,7 +51,7 @@ const Chat = () => {
                 </Box>
             </Flex>
             <Box visibleFrom='sm'>
-                <Avatar position={ [ -1, -2, 5 ] } scale={ 1.4 } avatar='avatars/avatar.glb' />
+                <Avatar position={ [ -1, -2, 5 ] } scale={ 1.4 } avatar={ avatar } />
             </Box>
         </Group>
     )

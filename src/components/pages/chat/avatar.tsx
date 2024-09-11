@@ -25,7 +25,7 @@ const Model = ({ avatar, ...props }: AvatarProps) => {
         return () => {
             actions.idle?.fadeOut(0.5)
         }
-    }, [ actions ])
+    }, [ actions, avatar ])
 
     useFrame(state => {
         (group.current as any)?.getObjectByName('Head').lookAt(state.camera.position)
@@ -45,7 +45,12 @@ const Avatar = (props: AvatarProps) => {
     return (
         <div style={ { position: 'relative', height: '90vh' } }>
             <div style={ { position: 'absolute', inset: 0, bottom: 0, zIndex: 10 } }>
-                <Canvas shadows camera={ { position: [ -1.7, 0, 8 ], fov: 30 } } style={ { height: '100%' } }>
+                <Canvas
+                    key={ props.avatar }
+                    shadows
+                    camera={ { position: [ -1.7, 0, 8 ], fov: 30 } }
+                    style={ { height: '100%' } }
+                >
                     <Model { ...props } />
                     <Environment preset='sunset' />
                 </Canvas>
