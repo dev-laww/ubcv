@@ -20,7 +20,8 @@ const register = async (data: any) => {
             where: { id: user.id },
             data: {
                 username: data.username,
-                password: await hash(data.password)
+                password: await hash(data.password),
+                settings: { create: {} }
             }
         })
 
@@ -32,7 +33,8 @@ const register = async (data: any) => {
             name: data.name,
             username: data.username,
             email: data.email,
-            password: await hash(data.password)
+            password: await hash(data.password),
+            settings: { create: {} }
         }
     })
 }
