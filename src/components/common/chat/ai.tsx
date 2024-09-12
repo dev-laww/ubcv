@@ -5,9 +5,11 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { createLowlight } from 'lowlight';
 import ts from 'highlight.js/lib/languages/typescript';
 import { motion, Transition } from 'framer-motion';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { marked } from 'marked';
 import { random } from '@utils/number';
+import { useSettings } from '@hooks';
+import { SettingsContextType } from '@context';
 
 const lowlight = createLowlight();
 
@@ -21,34 +23,6 @@ function escapeHtml(unsafe: string) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
 }
-
-
-const md = `
-## Hello, world!
-
----
-
-\`\`\`
-Test Code
-
-import { RichTextEditor } from '@mantine/tiptap';
-
-const lowlight = createLowlight();
-
-// register languages that you are planning to use
-lowlight.register({ ts });
-
-function escapeHtml(unsafe: string) {
-    return unsafe
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-\`\`\`
-
-`
 
 const dot = {
     display: 'block',
@@ -135,7 +109,10 @@ interface AiProps {
 }
 
 const AiChat = ({ loading, content, slice }: AiProps) => {
+    const played = useRef(false)
+    const [ internalLoading, setLoading ] = useState(true);
     const [ message, setMessage ] = useState('');
+    const { settings } = useSettings() as SettingsContextType
     const editor = useEditor({
         extensions: [
             StarterKit.configure({ codeBlock: false }),
@@ -159,21 +136,45 @@ const AiChat = ({ loading, content, slice }: AiProps) => {
             return;
         }
 
-        // TODO: Implement tts
-        const words = content.split(' ');
-        let index = 0;
-        const interval = setInterval(() => {
-            setMessage(words.slice(0, index + 1).join(' '));
-            index++;
+        if (!settings || played.current) return;
 
-            if (index === words.length)
-                clearInterval(interval);
+        played.current = true;
 
-        }, random({ min: 50, max: 150 }));
+        (async () => {
+            const res = await fetch('/api/tts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ input: content, voice: settings.voice.toLowerCase() })
+            });
 
-        return () => clearInterval(interval);
+            if (!res.ok) return;
 
-    }, [ content, slice ]);
+            const audioBlob = await res.blob();
+            const url = URL.createObjectURL(audioBlob);
+
+            const audio = new Audio(url);
+
+            audio.onplay = () => {
+                setLoading(false);
+                // simulate typing
+                const words = content.split(' ');
+                let index = 0;
+                const interval = setInterval(() => {
+                    setMessage(words.slice(0, index + 1).join(' '));
+                    index++;
+
+                    if (index === words.length)
+                        clearInterval(interval);
+
+                }, random({ min: 50, max: 150 }));
+            }
+
+            audio.onended = () => URL.revokeObjectURL(url);
+
+            await audio.play();
+
+        })()
+    }, [ settings, content, slice ])
 
     useEffect(() => {
         if (!message) return;
@@ -181,7 +182,7 @@ const AiChat = ({ loading, content, slice }: AiProps) => {
         parse(message).then();
     }, [ message, parse ]);
 
-    return loading ? (
+    return loading || internalLoading ? (
         <Loading />
     ) : (
         <RichTextEditor editor={ editor } style={ { border: 'none', pointerEvents: 'none' } }>

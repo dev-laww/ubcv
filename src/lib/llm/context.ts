@@ -4,6 +4,7 @@ import { OllamaEmbeddings } from '@langchain/ollama';
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
 import { Embeddings } from '@langchain/core/embeddings';
 import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
+import { OpenAIEmbeddings } from '@langchain/openai';
 
 class Context {
     static async loadFromLoader(loader: any, embeddings: Embeddings) {
@@ -21,14 +22,14 @@ class Context {
 
     static async load(file: Blob) {
         const loader = new WebPDFLoader(file);
-        const embeddings = new OllamaEmbeddings();
+        const embeddings = new OpenAIEmbeddings();
 
         return Context.loadFromLoader(loader, embeddings);
     }
 
     static async loadLocal(file: string) {
         const loader = new PDFLoader(file);
-        const embeddings = new OllamaEmbeddings();
+        const embeddings = new OpenAIEmbeddings();
 
         return Context.loadFromLoader(loader, embeddings);
     }

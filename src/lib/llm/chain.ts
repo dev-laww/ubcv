@@ -8,6 +8,7 @@ import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import { MessageHistory } from '@lib/llm/message-history';
 import { IterableReadableStream } from '@langchain/core/dist/utils/stream';
+import { OpenAI } from '@langchain/openai';
 
 
 const CONTEXTUALIZE_Q_PROMPT = `
@@ -32,7 +33,7 @@ interface Session {
 }
 
 class Chain {
-    static llm = new Ollama({ model: 'llama3.1', temperature: 0.5 });
+    static llm = new OpenAI({ model: 'gpt-4o-mini', temperature: 0.5 });
     static retriever: VectorStoreRetriever;
     static chain: Runnable;
 
