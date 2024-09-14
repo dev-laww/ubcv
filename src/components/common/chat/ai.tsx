@@ -133,6 +133,7 @@ const AiChat = ({ loading, content, slice }: AiProps) => {
 
         if (!slice) {
             setMessage(content);
+            setLoading(false);
             return;
         }
 

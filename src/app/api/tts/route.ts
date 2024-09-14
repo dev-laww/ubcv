@@ -26,8 +26,6 @@ export const speech = async ({ input, voice = 'alloy' }: SpeechOptions) => {
 export const POST = async (req: Request) => {
     const body = await req.json()
 
-    console.log(body)
-
     const { data, error } = SpeechOptionsSchema.safeParse(body)
 
     if (error)
