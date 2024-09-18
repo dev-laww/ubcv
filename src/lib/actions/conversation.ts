@@ -2,6 +2,7 @@
 
 import { prisma } from '@lib/prisma';
 import { auth } from '@lib/auth';
+import { Chain } from '@lib/llm/chain';
 
 export const all = async () => {
     const { user } = await auth() || {}
@@ -19,8 +20,19 @@ export const get = async (id: string) => {
     })
 }
 
-const generateTitle = async (id: string) => {
-    // TODO: Implement title generation
+export const generateTitle = async (id: string) => {
+    const conversation = await prisma.conversation.findUnique({ where: { id }, include: { messages: true } });
 
-    return id
+    if (conversation?.title) return conversation.title;
+
+    if (!conversation || ((conversation?.messages?.length || 0) < 4)) return null;
+
+    const title = await Chain.title(id) as string;
+
+    await prisma.conversation.update({
+        where: { id },
+        data: { title }
+    });
+
+    return title;
 }

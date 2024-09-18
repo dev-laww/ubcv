@@ -1,10 +1,12 @@
 'use client'
 
 import classes from './component.module.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Box, Text } from '@mantine/core';
 import { Conversation as Item } from '@prisma/client';
 import { useWindowLocation } from '@hooks';
+import { generateTitle } from '@actions/conversation';
 
 interface ConversationProps {
     data: Item;
@@ -12,19 +14,32 @@ interface ConversationProps {
 }
 
 const Conversation: React.FC<Readonly<ConversationProps>> = ({ data, onClick }) => {
-    const url = `/chat?thread=${ data.id }`;
+    const [ conversation, setConversation ] = useState(data);
     const windowLocation = useWindowLocation();
 
     // TODO: Add title prompt
+
+    useEffect(() => {
+        if (conversation.title) return;
+
+        generateTitle(conversation.id).then(title => setConversation(prev => ({ ...prev, title })))
+    }, []);
+
     return (
-        <Link
+        <Box
+            component={ Link }
             className={ classes.link }
-            data-active={ windowLocation === url || undefined }
+            data-active={ windowLocation === `/chat?thread=${ data.id }` || undefined }
             onClick={ onClick }
-            href={ url }
+            href={ `/chat?thread=${ data.id }` }
         >
-            <span>{ data.id }</span>
-        </Link>
+            <Text
+                w={ 290 }
+                truncate='end'
+            >
+                { conversation.title ? conversation.title : 'New Chat' }
+            </Text>
+        </Box>
     )
 }
 

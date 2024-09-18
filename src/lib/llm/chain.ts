@@ -1,4 +1,3 @@
-import { Ollama } from '@langchain/ollama';
 import { Runnable, RunnableConfig, RunnableWithMessageHistory } from '@langchain/core/runnables';
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts';
 import { VectorStoreRetriever } from '@langchain/core/vectorstores';
@@ -8,7 +7,7 @@ import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import { MessageHistory } from '@lib/llm/message-history';
 import { IterableReadableStream } from '@langchain/core/dist/utils/stream';
-import { ChatOpenAI, OpenAI } from '@langchain/openai';
+import { ChatOpenAI } from '@langchain/openai';
 
 
 const CONTEXTUALIZE_Q_PROMPT = `
@@ -24,6 +23,15 @@ const QA_PROMPT = `
     Use three sentences maximum and keep the answer concise.
     
     {context}
+`;
+
+const TITLE_PROMPT = `
+    You are an author capable of generating titles for chat histories.
+    Given a chat history, generate a title for the chat.
+    The title should be a concise summary of the chat history.
+    The title should not include anything that mentions that it is a chat history summary.
+    It should be a single sentence and should not exceed 50 characters.
+    Just return the title, do not include any other information.
 `;
 
 interface Session {
@@ -47,6 +55,11 @@ class Chain {
         [ 'system', QA_PROMPT ],
         new MessagesPlaceholder('chat_history'),
         [ 'human', '{input}' ]
+    ]);
+
+    static titlePrompt = ChatPromptTemplate.fromMessages([
+        [ 'system', TITLE_PROMPT ],
+        new MessagesPlaceholder('chat_history')
     ]);
 
     static async assemble(retriever: VectorStoreRetriever, config: RunnableConfig = {}) {
@@ -89,6 +102,15 @@ class Chain {
         const stream = async (input: string) => chain.stream({ input }, config);
 
         return { chain, invoke, stream } as Session;
+    }
+
+    static async title(sessionId: string) {
+        const history = new MessageHistory({ sessionId });
+        const messages = await history.getMessages();
+
+        const res = await this.titlePrompt.pipe(this.llm).invoke({ chat_history: messages });
+
+        return res.content;
     }
 }
 
