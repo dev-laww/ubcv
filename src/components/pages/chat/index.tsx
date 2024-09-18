@@ -1,14 +1,22 @@
 'use client'
 
-import { Box, Container, Flex, Group, ScrollArea } from '@mantine/core';
+import { Box, Center, Container, Flex, Group, ScrollArea } from '@mantine/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { Message } from '@components/forms';
 import { useElementSize } from '@mantine/hooks';
 import dynamic from 'next/dynamic'
 import { useChat, useSettings } from '@hooks';
 import { Settings } from '@types'
+import { IconLoader } from '@tabler/icons-react';
 
-const Avatar = dynamic(() => import('./avatar').then(mod => mod.Avatar), { ssr: false })
+const Avatar = dynamic(() => import('./avatar').then(mod => mod.Avatar), {
+    ssr: false,
+    loading: () => (
+        <Center c='puceRed'>
+            <IconLoader />
+        </Center>
+    )
+})
 
 
 const Chat = () => {

@@ -40,7 +40,10 @@ const Chat: React.FC<Readonly<ChatProps>> = ({ children, session }) => {
                             color='puceRed.1'
                         />
 
-                        <ActionIcon color='puceRed.1' variant='transparent' onClick={ () => router.push('/chat') }>
+                        <ActionIcon color='puceRed.1' variant='transparent' onClick={ () => {
+                            mobileOpened && toggleMobile()
+                            router.push('/chat')
+                        } }>
                             <IconEdit stroke={ 1.5 } />
                         </ActionIcon>
                     </Group>
@@ -55,7 +58,7 @@ const Chat: React.FC<Readonly<ChatProps>> = ({ children, session }) => {
                             <IconEdit stroke={ 1.5 } />
                         </ActionIcon>
                     </Group>
-                    <Navigation session={ session } />
+                    <Navigation session={ session } mobileNavOpened={ mobileOpened } toggleMobileNav={ toggleMobile } />
                 </AppShell.Navbar>
 
                 <AppShell.Main mah='100vh' style={ { display: 'flex' } }>

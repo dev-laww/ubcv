@@ -8,9 +8,10 @@ import { useWindowLocation } from '@hooks';
 
 interface ConversationProps {
     data: Item;
+    onClick?: () => void;
 }
 
-const Conversation: React.FC<Readonly<ConversationProps>> = ({ data }) => {
+const Conversation: React.FC<Readonly<ConversationProps>> = ({ data, onClick }) => {
     const url = `/chat?thread=${ data.id }`;
     const windowLocation = useWindowLocation();
 
@@ -19,6 +20,7 @@ const Conversation: React.FC<Readonly<ConversationProps>> = ({ data }) => {
         <Link
             className={ classes.link }
             data-active={ windowLocation === url || undefined }
+            onClick={ onClick }
             href={ url }
         >
             <span>{ data.id }</span>

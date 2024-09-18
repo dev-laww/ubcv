@@ -13,9 +13,11 @@ import { Conversation } from '@components/common/navigation/conversation';
 
 interface NavigationProps extends React.PropsWithChildren {
     session: Session;
+    mobileNavOpened?: boolean;
+    toggleMobileNav?: () => void;
 }
 
-const Navigation: React.FC<Readonly<NavigationProps>> = ({ session }) => {
+const Navigation: React.FC<Readonly<NavigationProps>> = ({ session, mobileNavOpened, toggleMobileNav }) => {
     const [ conversations, setConversations ] = useState<Model[]>([]);
     const searchParams = useSearchParams();
 
@@ -30,7 +32,12 @@ const Navigation: React.FC<Readonly<NavigationProps>> = ({ session }) => {
             </AppShell.Section>
 
             <AppShell.Section grow component={ ScrollArea } scrollbarSize={ 5 } offsetScrollbars>
-                { conversations.map(conversation => <Conversation key={ conversation.id } data={ conversation } />) }
+                { conversations.map(conversation => {
+                    const click = () => {
+                        mobileNavOpened && toggleMobileNav!();
+                    }
+                    return <Conversation key={ conversation.id } data={ conversation } onClick={ click } />
+                }) }
             </AppShell.Section>
 
             <AppShell.Section>
