@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { get } from '@actions/conversation';
 import { AiChat, HumanChat } from '@components/common/chat';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useRouter, useSearchParams } from 'next/navigation';
 import { create, message } from '@actions/message';
 import { useSettings } from '@hooks/use-settings';
 import { Settings } from '@types';
@@ -9,6 +9,7 @@ import { Settings } from '@types';
 export const useChat = () => {
     const searchParams = useSearchParams()
     const [ hasError, setHasError ] = useState(false)
+    const [ found, setFound ] = useState(true)
     const { settings } = useSettings() as { settings: Settings }
     const [ conversation, setConversation ] = useState<React.ReactNode[]>([])
     const router = useRouter()
@@ -76,6 +77,11 @@ export const useChat = () => {
         const getConversation = async () => {
             const messages = await get(thread)
 
+            if (!messages) {
+                setFound(false)
+                return
+            }
+
             const messagesList = messages.map(message => {
                 if (message.type === 'HUMAN')
                     return <HumanChat content={ message.content } key={ message.id } />
@@ -87,7 +93,9 @@ export const useChat = () => {
         }
 
         getConversation().catch(() => setHasError(true))
-    }, [ searchParams ]);
+    }, [ router, searchParams ]);
+
+    if (!found) return notFound()
 
     return { send, conversation, hasError }
 }

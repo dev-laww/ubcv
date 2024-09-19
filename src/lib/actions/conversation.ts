@@ -3,6 +3,7 @@
 import { prisma } from '@lib/prisma';
 import { auth } from '@lib/auth';
 import { Chain } from '@lib/llm/chain';
+import { Session } from 'next-auth';
 
 export const all = async () => {
     const { user } = await auth() || {}
@@ -14,10 +15,23 @@ export const all = async () => {
 }
 
 export const get = async (id: string) => {
-    return prisma.message.findMany({
-        where: { conversation: { id } },
-        orderBy: { createdAt: 'asc' }
-    })
+    const session = await auth() as Session;
+
+    const conversation = await prisma.conversation.findUnique({
+        where: {
+            id,
+            user: { email: session.user!.email! }
+        },
+        include: {
+            messages: {
+                orderBy: { createdAt: 'asc' }
+            }
+        }
+    });
+    
+    if (!conversation) return null;
+    
+    return conversation.messages;
 }
 
 export const generateTitle = async (id: string) => {
