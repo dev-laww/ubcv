@@ -28,9 +28,9 @@ export const get = async (id: string) => {
             }
         }
     });
-    
+
     if (!conversation) return null;
-    
+
     return conversation.messages;
 }
 

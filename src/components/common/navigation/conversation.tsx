@@ -31,7 +31,7 @@ const Conversation: React.FC<Readonly<ConversationProps>> = ({ data, onClick }) 
             onClick={ onClick }
             href={ `/chat?thread=${ data.id }` }
         >
-            <Text w={ 280 } truncate="end">
+            <Text w={ 280 } truncate='end'>
                 { conversation.title ? conversation.title : 'New Chat' }
             </Text>
         </Box>

@@ -1,6 +1,5 @@
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 import { WebPDFLoader } from '@langchain/community/document_loaders/web/pdf';
-import { OllamaEmbeddings } from '@langchain/ollama';
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
 import { Embeddings } from '@langchain/core/embeddings';
 import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';

@@ -1,5 +1,4 @@
 
-
 .inner {
     position: relative;
 }
@@ -16,7 +15,7 @@
     z-index: 1;
     padding-top: rem(220px);
 
-    @media (max-width: $ mantine-breakpoint-sm) {
+    @media (max-width: $mantine-breakpoint-sm) {
         padding-top: rem(120px);
     }
 }

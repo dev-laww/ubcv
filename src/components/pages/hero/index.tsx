@@ -21,9 +21,11 @@ const Hero: React.FC = () => {
                             <Text className={ classes.description } size='xl' mt='xl'>
 
                                 Introducing the next-generation AI chatbot for the University of Batangas, designed to
-                                embody and promote the institution&lsquo;s core values. This intelligent assistant not only
+                                embody and promote the institution&lsquo;s core values. This intelligent assistant not
+                                only
                                 answers questions but also engages students and faculty in meaningful conversations,
-                                fostering a deeper connection to UB&lsquo;s principles of integrity, excellence, and social
+                                fostering a deeper connection to UB&lsquo;s principles of integrity, excellence, and
+                                social
                                 responsibility
                             </Text>
 
