@@ -10,12 +10,12 @@ interface SpeechOptions {
     voice?: Voice
 }
 
-export const SpeechOptionsSchema = z.object({
+const SpeechOptionsSchema = z.object({
     input: z.string(),
     voice: z.enum([ 'alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer' ]).optional()
 })
 
-export const speech = async ({ input, voice = 'alloy' }: SpeechOptions) => {
+const speech = async ({ input, voice = 'alloy' }: SpeechOptions) => {
     return openai.audio.speech.create({
         model: 'tts-1',
         voice,
