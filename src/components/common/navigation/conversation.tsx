@@ -17,8 +17,6 @@ const Conversation: React.FC<Readonly<ConversationProps>> = ({ data, onClick }) 
     const [ conversation, setConversation ] = useState(data);
     const windowLocation = useWindowLocation();
 
-    // TODO: Add title prompt
-
     useEffect(() => {
         if (conversation.title) return;
 
@@ -33,10 +31,7 @@ const Conversation: React.FC<Readonly<ConversationProps>> = ({ data, onClick }) 
             onClick={ onClick }
             href={ `/chat?thread=${ data.id }` }
         >
-            <Text
-                w={ 290 }
-                truncate='end'
-            >
+            <Text w={ 280 } truncate="end">
                 { conversation.title ? conversation.title : 'New Chat' }
             </Text>
         </Box>
