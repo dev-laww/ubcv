@@ -26,7 +26,7 @@ const Register = ({ session }: RegisterProps) => {
         },
         validate: {
             name: hasLength({ min: 1, max: 255 }, 'Name must be 2-10 characters long'),
-            email: isEmail('Invalid email'),
+            email: isEmail('Invalid email') || matches(/^[a-zA-Z0-9._%+-]+@domain.edu.ph$/, 'Email must be a domain email'), // TODO: Change to organization domain
             password: value => getStrength(value) !== 100 && 'Password is too weak',
             confirmPassword: (value, values) => value !== values.password && 'Passwords do not match'
         }
