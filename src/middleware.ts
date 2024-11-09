@@ -21,6 +21,8 @@ export const middleware = async (req: NextRequest) => {
 
         return NextResponse.next();
     }
+    
+    if (pathname.includes('/auth') && session) return NextResponse.rewrite(new URL('/not-found', req.nextUrl));
 
     if (!session) return NextResponse.redirect(new URL('/auth/login', req.nextUrl));
 

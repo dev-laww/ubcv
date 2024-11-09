@@ -16,7 +16,7 @@ const options: Partial<OAuthUserConfig<GoogleProfile>> = {
     authorization: {
         params: {
             prompt: 'select_account',
-            hd: 'domain.edu.ph' // TODO: Change to organization domain
+            hd: 'ub.edu.ph'
         }
     }
 }

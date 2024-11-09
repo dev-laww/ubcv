@@ -26,7 +26,7 @@ const Register = ({ session }: RegisterProps) => {
         },
         validate: {
             name: hasLength({ min: 1, max: 255 }, 'Name must be 2-10 characters long'),
-            email: isEmail('Invalid email') || matches(/^[a-zA-Z0-9._%+-]+@domain.edu.ph$/, 'Email must be a domain email'), // TODO: Change to organization domain
+            email: matches(/^[a-zA-Z0-9._%+-]+@ub.edu.ph$/, 'Email must be valid email'),
             password: value => getStrength(value) !== 100 && 'Password is too weak',
             confirmPassword: (value, values) => value !== values.password && 'Passwords do not match'
         }
@@ -83,6 +83,7 @@ const Register = ({ session }: RegisterProps) => {
                     label='Full Name'
                     placeholder='Your full name'
                     radius='md'
+                    disabled={ !!session?.user?.name }
                     { ...form.getInputProps('name') }
                 />
 
@@ -91,6 +92,7 @@ const Register = ({ session }: RegisterProps) => {
                     label='Email'
                     placeholder='Your email'
                     radius='md'
+                    disabled={ !!session?.user?.email }
                     { ...form.getInputProps('email') }
                 />
 
