@@ -93,7 +93,7 @@ class Chain {
 
     static async session(sessionId: string) {
         if (!this.retriever)
-            this.retriever = await Context.loadLocal('./test.pdf'); // TODO: load actual context
+            this.retriever = await Context.loadLocal('./public/context.pdf');
 
         const chain = await Chain.assemble(this.retriever);
 
