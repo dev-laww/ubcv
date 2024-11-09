@@ -92,8 +92,11 @@ class Chain {
     }
 
     static async session(sessionId: string) {
-        if (!this.retriever)
-            this.retriever = await Context.loadLocal('./public/context.pdf');
+        if (!this.retriever) {
+            const res = await fetch(`${process.env.AUTH_URL}/context.pdf`);
+            const blob = await res.blob();
+            this.retriever = await Context.load(blob);
+        }
 
         const chain = await Chain.assemble(this.retriever);
 
