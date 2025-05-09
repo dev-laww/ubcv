@@ -70,7 +70,10 @@ const Navigation: React.FC<Readonly<NavigationProps>> = ({ session, mobileNavOpe
                 { Object.entries(groups).map(([ title, items ]) =>
                     items.length ? (
                         <React.Fragment key={ title }>
-                            <Divider size='xs' my={ 8 } label={ <Text fw={ 500 }>{ title }</Text> } />
+                            <Divider
+                                size='xs' my={ 8 }
+                                label={ <Text fw={ 500 } size='xs' c='white'>{ title }</Text> }
+                            />
                             { items.map(conv => (
                                 <Conversation
                                     key={ conv.id }
