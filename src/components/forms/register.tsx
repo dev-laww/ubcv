@@ -1,11 +1,11 @@
 'use client'
 
-import { Anchor, Button, Group, Loader, PasswordInput, Stack, TextInput } from '@mantine/core';
+import { Anchor, Button, Checkbox, Group, Loader, PasswordInput, Stack, Text, TextInput } from '@mantine/core';
 import Link from 'next/link';
 import { PasswordStrength } from '@components/common/inputs';
 import React from 'react';
 import { Session } from 'next-auth';
-import { hasLength, isEmail, matches, useField, useForm } from '@mantine/form';
+import { hasLength, matches, useField, useForm } from '@mantine/form';
 import { available, register } from '@lib/actions/register';
 import { getStrength } from '@utils/password';
 import { notifications } from '@mantine/notifications';
@@ -22,12 +22,14 @@ const Register = ({ session }: RegisterProps) => {
             name: session?.user?.name,
             email: session?.user?.email,
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            tos: false
         },
         validate: {
             name: hasLength({ min: 1, max: 255 }, 'Name must be 2-10 characters long'),
             email: matches(/^[a-zA-Z0-9._%+-]+@ub.edu.ph$/, 'Email must be valid email'),
             password: value => getStrength(value) !== 100 && 'Password is too weak',
+            tos: value => !value && 'You must accept the terms of service',
             confirmPassword: (value, values) => value !== values.password && 'Passwords do not match'
         }
     })
@@ -49,7 +51,8 @@ const Register = ({ session }: RegisterProps) => {
             loading: true
         })
 
-        const error = await register({ ...values, username: username.getValue() })
+        const { tos, ...data } = values
+        const error = await register({ ...data, username: username.getValue() })
 
         if (error) {
             notifications.update({
@@ -123,6 +126,24 @@ const Register = ({ session }: RegisterProps) => {
                         { ...form.getInputProps('confirmPassword') }
                     />
                 </Group>
+
+                <Checkbox
+                    { ...form.getInputProps('tos') }
+                    defaultChecked
+                    size='xs'
+                    label={
+                        <Text size='xs' c='dimmed'>
+                            By continuing, I accept to E-UBCV&#39;s{ ' ' }
+                            <Anchor component={ Link } href='/terms-of-service'>
+                                Terms of Service
+                            </Anchor>
+                            &nbsp;and I acknowledge the E-UBCV&#39;s&nbsp;
+                            <Anchor component={ Link } href='/privacy-policy'>
+                                Privacy Policy
+                            </Anchor>
+                        </Text>
+                    }
+                />
             </Stack>
 
             <Group justify='space-between' mt='xl'>
