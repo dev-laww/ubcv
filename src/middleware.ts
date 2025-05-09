@@ -30,4 +30,4 @@ export const middleware = async (req: NextRequest) => {
 }
 
 
-export const config = { matcher: '/((?!.*\\.|api|auth).*)' }
+export const config = { matcher: '/((?!.*\\.|api|auth|legal).*)' }
