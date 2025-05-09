@@ -1,7 +1,7 @@
 'use client'
 
 import { useDisclosure, useHover, useMediaQuery } from '@mantine/hooks'
-import { Box, Button, Group, Modal, rem, Select, Stack, Tabs, Text, TextInput } from '@mantine/core'
+import { Anchor, Box, Button, Group, Modal, rem, Select, Stack, Tabs, Text, TextInput } from '@mantine/core'
 import { IconSettings, IconUserCog } from '@tabler/icons-react';
 import React, { useEffect, useState } from 'react';
 import './component.css'
@@ -143,17 +143,26 @@ const Settings = () => {
                             </Button>
                         </Group>
                     </Tabs.Panel>
+
                     <Tabs.Panel value='personalization' px='sm' py={ !matches && 'sm' || undefined }>
                         <form onSubmit={ form.onSubmit(submit) } style={ { height: '100%' } }>
                             <Stack justify='space-between' h='100%'>
                                 <Stack>
-                                    <Group pl='sm' justify='space-between'>
-                                        <Text>Avatar</Text>
-                                        <TextInput
-                                            w='40%'
-                                            { ...form.getInputProps('avatar') }
-                                        />
-                                    </Group>
+                                    <Stack gap={ 5 }>
+                                        <Group pl='sm' justify='space-between'>
+                                            <Text>Avatar</Text>
+                                            <TextInput
+                                                w='40%'
+                                                { ...form.getInputProps('avatar') }
+                                            />
+                                        </Group>
+                                        <Text size='sm' pl='sm' c='dimmed'>
+                                            Note: This {' '}
+                                            <Anchor target='_blank' href='https://demo.readyplayer.me/avatar'>link</Anchor>
+                                            {' '} is where you can customize your avatar
+                                        </Text>
+                                    </Stack>
+
                                     <Group pl='sm' justify='space-between'>
                                         <Text>Voice</Text>
                                         <Select
