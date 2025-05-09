@@ -4,7 +4,7 @@ import { Providers } from '@components/common';
 
 export const metadata = {
     title: {
-        default: 'UBCV',
+        default: 'E - UBCV',
         template: '%s | UBCV'
     }
 };
@@ -14,7 +14,7 @@ const RootLayout = ({ children }: Readonly<React.PropsWithChildren>) => {
         <html lang='en'>
         <head>
             <ColorSchemeScript />
-            <link rel='shortcut icon' href='/favicon.svg' />
+            <link rel='shortcut icon' href='/logo.svg' />
             {/*<link rel='stylesheet' href='https://cdn.oaistatic.com/assets/root-dunwnenm.css' />*/}
             <meta
                 name='viewport'
