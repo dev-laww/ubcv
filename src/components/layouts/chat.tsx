@@ -61,7 +61,15 @@ const Chat: React.FC<Readonly<ChatProps>> = ({ children, session }) => {
                     <Navigation session={ session } mobileNavOpened={ mobileOpened } toggleMobileNav={ toggleMobile } />
                 </AppShell.Navbar>
 
-                <AppShell.Main mah='100vh' style={ { display: 'flex' } }>
+                <AppShell.Main
+                    mah='100vh'
+                    style={ {
+                        display: 'flex',
+                        background: 'url(/ub-logo.png) no-repeat center center / 60vmin 60vmin',
+                        backgroundColor: 'rgba(255,255,255,0.8)',
+                        backgroundBlendMode: 'lighten'
+                    } }
+                >
                     <Flex direction='column' w='100%'>
                         { !desktopOpened && (
                             <Group visibleFrom='sm'>
@@ -78,7 +86,8 @@ const Chat: React.FC<Readonly<ChatProps>> = ({ children, session }) => {
                 </AppShell.Main>
             </AppShell>
         </SettingsProvider>
-    );
+    )
+        ;
 }
 
 
