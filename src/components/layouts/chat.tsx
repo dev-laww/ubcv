@@ -66,7 +66,7 @@ const Chat: React.FC<Readonly<ChatProps>> = ({ children, session }) => {
                     style={ {
                         display: 'flex',
                         background: 'url(/ub-logo.png) no-repeat center center / 60vmin 60vmin',
-                        backgroundColor: 'rgba(255,255,255,0.8)',
+                        backgroundColor: 'rgba(255, 249, 237,0.8)',
                         backgroundBlendMode: 'lighten'
                     } }
                 >
