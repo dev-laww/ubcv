@@ -1,6 +1,6 @@
 'use client'
 
-import { AppShell, ScrollArea } from '@mantine/core';
+import { AppShell, ScrollArea, Stack, Text } from '@mantine/core';
 import { Logo } from '@components/common';
 import classes from './component.module.css';
 import { User } from '@components/common/buttons';
@@ -28,7 +28,10 @@ const Navigation: React.FC<Readonly<NavigationProps>> = ({ session, mobileNavOpe
     return (
         <>
             <AppShell.Section className={ classes.header }>
-                <Logo full c='white' />
+                <Stack gap={ 0 }>
+                    <Logo full c='white' />
+                    <Text ta='center' fw={ 700 } c='white'>Conversation History</Text>
+                </Stack>
             </AppShell.Section>
 
             <AppShell.Section grow component={ ScrollArea } scrollbarSize={ 5 } offsetScrollbars>
