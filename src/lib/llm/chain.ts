@@ -18,8 +18,8 @@ const CONTEXTUALIZE_Q_PROMPT = `
 
 const QA_PROMPT = `
     You are an assistant for question-answering tasks.
-    Use the following pieces of retrieved context to answer the question.
-    If you don't know the answer, just say that you don't know.
+    Use the following pieces of retrieved information to answer the question.
+    If the information is not relevant or the context is empty, politely say that you don't have any information about it. 
     Use three sentences maximum and keep the answer concise.
     
     {context}
